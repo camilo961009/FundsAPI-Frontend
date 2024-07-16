@@ -1,0 +1,15 @@
+.container {
+    max-width: 600px;
+  }
+  
+  h2, h3 {
+    color: #007bff;
+  }
+  
+  .list-group-item {
+    background-color: #f8f9fa;
+  }
+  
+  .alert-heading {
+    color: #17a2b8;
+  }

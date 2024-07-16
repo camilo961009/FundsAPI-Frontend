@@ -1,0 +1,25 @@
+<div>
+  <h2>Fondos</h2>
+  <ul>
+    <li *ngFor="let fondo of fondos">{{ fondo.nombre }} - {{ fondo.montoMinimo }} - {{ fondo.categoria }}</li>
+  </ul>
+  <h3>Crear Nuevo Fondo</h3>
+  <form #fondoForm="ngForm" (ngSubmit)="onCreateFondo(fondoForm.value)">
+    <label for="nombre">Nombre:</label>
+    <select id="nombre" name="nombre" ngModel (change)="onFondoChange($event)">
+      <option value="FPV_BTG_PACTUAL_RECAUDADORA">FPV_BTG_PACTUAL_RECAUDADORA</option>
+      <option value="FPV_BTG_PACTUAL_ECOPETROL">FPV_BTG_PACTUAL_ECOPETROL</option>
+      <option value="DEUDAPRIVADA">DEUDAPRIVADA</option>
+      <option value="FDO-ACCIONES">FDO-ACCIONES</option>
+      <option value="FPV_BTG_PACTUAL_DINAMICA">FPV_BTG_PACTUAL_DINAMICA</option>
+    </select>
+    <label for="montoMinimo">Monto Mínimo:</label>
+    <input id="montoMinimo" name="montoMinimo" type="number" ngModel [(ngModel)]="montoMinimo">
+    <label for="categoria">Categoría:</label>
+    <input id="categoria" name="categoria" ngModel [(ngModel)]="categoria" readonly>
+    <button type="submit">Crear</button>
+  </form>
+</div>
+
+
+
