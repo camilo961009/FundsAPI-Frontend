@@ -74,7 +74,7 @@ export class SubscriptionComponent implements OnInit {
       case 'FDO-ACCIONES':
         return 250000;
       case 'FPV_BTG_PACTUAL_DINAMICA':
-        return 1000000;
+        return 100000;
       default:
         return 0;
     }

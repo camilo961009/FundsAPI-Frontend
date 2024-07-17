@@ -16,11 +16,9 @@ export class TransactionHistoryComponent implements OnInit {
 
   ngOnInit(): void {
     // Asume que fondoService tiene un método getTransacciones
-    this.fondoService.getFondos().subscribe(fondos => {
-      this.fondos = fondos;
+    this.fondoService.getTransacciones().subscribe(transacciones => {
+      this.transacciones = transacciones;
     });
   }
-  
-
 }
 

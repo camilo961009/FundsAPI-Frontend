@@ -1,8 +1,6 @@
+<!-- transaction-history.component.html -->
 <div>
   <h2>Historial de Transacciones</h2>
-  <ul>
-    <li *ngFor="let fondo of fondos">{{ fondo.nombre }} - {{ fondo.montoMinimo }} - {{ fondo.categoria }}</li>
-  </ul>
   <ul>
     <li *ngFor="let transaccion of transacciones">
       {{ transaccion.fecha | date }} - {{ transaccion.tipo }} - {{ transaccion.monto }}
