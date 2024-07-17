@@ -1,15 +1,65 @@
+/* Estilos para la sección de Fondos */
+.section-fondos {
+  margin-bottom: 20px; /* Margen inferior para separar de otras secciones */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.section-fondos h2 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.section-fondos table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.section-fondos th, .section-fondos td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.section-fondos th {
+  background-color: #f0f0f0;
+}
+
+/* Estilos para el formulario de Crear Nuevo Fondo */
+.section-crear-fondo {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.section-crear-fondo h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.section-crear-fondo .form-group {
+  margin-bottom: 15px;
+}
+
+.section-crear-fondo button[type="submit"] {
+  width: 100%;
+}
+
+/* Estilos generales */
 .container {
-    max-width: 600px;
+  max-width: 900px; /* Ajustar el ancho máximo del contenido */
+  margin: 0 auto; /* Centrar el contenido */
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
   }
-  
-  h2, h3 {
-    color: #007bff;
+
+  .section-fondos, .section-crear-fondo {
+    padding: 15px;
   }
-  
-  .list-group-item {
-    background-color: #f8f9fa;
-  }
-  
-  .alert-heading {
-    color: #17a2b8;
-  }
+}

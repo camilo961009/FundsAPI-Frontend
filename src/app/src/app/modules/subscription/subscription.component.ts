@@ -1,6 +1,7 @@
 import { Component,OnInit } from '@angular/core';
 import { FundService } from '../../services/fund.service';
 import { Fondo } from '../../../../Mod/fondo.model';
+import { BalanceService } from '../../services/BalanceService';
 
 @Component({
   selector: 'app-subscription',
@@ -15,14 +16,19 @@ export class SubscriptionComponent implements OnInit {
   categoria: string = '';
   userBalance: number = 500000; // Ejemplo de saldo del usuario
 
-  constructor(private fundService: FundService) { }
+  constructor(private fundService: FundService, private balanceService: BalanceService) {
+    this.userBalance = this.balanceService.getBalance();
+   }
 
   ngOnInit(): void {
+    this.refreshFondos();
+  }
+  
+  refreshFondos(): void {
     this.fundService.getFondos().subscribe(fondos => {
       this.fondos = fondos;
     });
   }
-
   onFondoChange(event: Event | undefined): void {
     if (event) {
       const selectElement = event.target as HTMLSelectElement;
@@ -54,11 +60,14 @@ export class SubscriptionComponent implements OnInit {
 
   onCreateFondo(fondo: Fondo): void {
     const montoMinimoRequerido = this.getMontoMinimo(fondo.nombre);
-    if (fondo.montoMinimo < montoMinimoRequerido) {
+    if (fondo.montoMinimo > this.userBalance) {
+      alert(`No tiene saldo suficiente para vincularse al fondo ${fondo.nombre}`);
+    } else if (fondo.montoMinimo < montoMinimoRequerido) {
       alert(`El monto mínimo para ${fondo.nombre} es ${montoMinimoRequerido}`);
     } else {
       this.fundService.createFondo(fondo).subscribe(newFondo => {
         this.fondos.push(newFondo);
+        this.userBalance -= newFondo.montoMinimo; // Restar el monto creado al saldo inicial
       });
     }
   }

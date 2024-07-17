@@ -1,9 +1,28 @@
 <!-- transaction-history.component.html -->
-<div>
-  <h2>Historial de Transacciones</h2>
-  <ul>
-    <li *ngFor="let transaccion of transacciones">
-      {{ transaccion.fecha | date }} - {{ transaccion.tipo }} - {{ transaccion.monto }}
-    </li>
-  </ul>
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <h2 class="card-title">Historial de Transacciones</h2>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th class="text-center">Fecha</th>
+              <th class="text-center">Tipo</th>
+              <th class="text-center">Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let transaccion of transacciones">
+              <td class="text-center font-weight-bold">{{ transaccion.fecha | date }}</td>
+              <td class="text-center">{{ transaccion.tipo }}</td>
+              <td class="text-center">{{ transaccion.monto | currency:'USD':'symbol':'1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
+
+

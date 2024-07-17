@@ -10,6 +10,7 @@ import { CancellationComponent } from './src/app/modules/cancellation/cancellati
 import { TransactionHistoryComponent } from './src/app/modules/transaction-history/transaction-history.component';
 import { NotificationComponent } from './src/app/modules/notification/notification.component';
 import { FundService } from './src/app/services/fund.service';
+import { BalanceService } from './src/app/services/BalanceService';
 
 
 @NgModule({
@@ -26,7 +27,7 @@ import { FundService } from './src/app/services/fund.service';
     FormsModule,
     HttpClientModule
   ],
-  providers: [FundService],
+  providers: [FundService, BalanceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
