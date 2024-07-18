@@ -3,4 +3,5 @@ export interface Fondo {
     nombre: string;
     montoMinimo: number;
     categoria: string;
+    correo: string;
   }

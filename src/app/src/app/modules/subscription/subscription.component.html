@@ -24,7 +24,7 @@
     <div class="col-md-4">
       <div class="mb-4"> <!-- Agregando mb-4 para un margen inferior -->
         <h3>Crear Nuevo Fondo</h3>
-        <p>Saldo inicial: {{ userBalance }}</p>
+        <p class="font-weight-bold">Monto: {{ montoInicial | currency:'USD':'symbol':'1.2-2' }}</p>
         <form #fondoForm="ngForm" (ngSubmit)="onCreateFondo(fondoForm.value)">
           <div class="form-group">
             <label for="nombre">Nombre:</label>
@@ -44,17 +44,13 @@
             <label for="categoria">Categoría:</label>
             <input id="categoria" name="categoria" class="form-control" ngModel [(ngModel)]="categoria" readonly>
           </div>
+          <div class="form-group">
+            <label for="correo">Correo:</label>
+            <input id="correo" name="correo" type="email" class="form-control" ngModel>
+          </div>
           <button type="submit" class="btn btn-primary">Crear</button>
         </form>
       </div>
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
-

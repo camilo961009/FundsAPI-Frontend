@@ -2,6 +2,7 @@ import { Component,OnInit } from '@angular/core';
 import { FundService } from '../../services/fund.service';
 import { Fondo } from '../../../../Mod/fondo.model';
 import { BalanceService } from '../../services/BalanceService';
+import { Transaccion } from 'src/app/Mod/Transaccion.model';
 
 @Component({
   selector: 'app-subscription',
@@ -9,24 +10,34 @@ import { BalanceService } from '../../services/BalanceService';
   styleUrls: ['./subscription.component.css']
 })
 export class SubscriptionComponent implements OnInit {
-  
+  transacciones: Transaccion[] = [];
   fondos: Fondo[] = [];
   selectedFondo: Fondo | null = null;
   montoMinimo: number = 0;
   categoria: string = '';
   userBalance: number = 500000; // Ejemplo de saldo del usuario
+  montoInicial: number = 500000;
 
   constructor(private fundService: FundService, private balanceService: BalanceService) {
     this.userBalance = this.balanceService.getBalance();
    }
 
   ngOnInit(): void {
-    this.refreshFondos();
+    this.refreshFondos(); 
+    
+    this.fundService.getTransacciones().subscribe(transacciones => {
+      this.transacciones = transacciones;
+
+      // Calcular el monto inicial basado en las transacciones
+      this.calcularMontoInicial();
+    });
   }
   
   refreshFondos(): void {
     this.fundService.getFondos().subscribe(fondos => {
       this.fondos = fondos;
+      // Calcular el monto inicial basado en las transacciones
+      this.calcularMontoInicial();
     });
   }
   onFondoChange(event: Event | undefined): void {
@@ -87,6 +98,16 @@ export class SubscriptionComponent implements OnInit {
       default:
         return 0;
     }
+  }
+
+  calcularMontoInicial(): void {
+    this.transacciones.forEach(transaccion => {
+      if (transaccion.tipo === 'Eliminación') {
+        this.montoInicial += transaccion.monto;
+      } else if (transaccion.tipo === 'Creación') {
+        this.montoInicial -= transaccion.monto;
+      }
+    });
   }
   
 }
