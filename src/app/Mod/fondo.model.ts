@@ -4,4 +4,5 @@ export interface Fondo {
     montoMinimo: number;
     categoria: string;
     correo: string;
+    celular: string;
   }

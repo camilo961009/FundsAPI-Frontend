@@ -19,13 +19,13 @@ export class CancellationComponent implements OnInit {
   }
 
   onCancelFondo(id: string | undefined): void {
-    if (id) {
-      this.fundService.deleteFondo(id).subscribe(() => {
-        this.fondos = this.fondos.filter(f => f.id !== id);
-      });
-    } else {
+    if (!id) {
       console.error('ID is undefined');
+      return;
     }
+
+    this.fundService.deleteFondo(id).subscribe(() => {
+      this.fondos = this.fondos.filter(f => f.id !== id);
+    });
   }
-    // 
 }

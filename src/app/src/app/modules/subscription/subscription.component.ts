@@ -13,101 +13,98 @@ export class SubscriptionComponent implements OnInit {
   transacciones: Transaccion[] = [];
   fondos: Fondo[] = [];
   selectedFondo: Fondo | null = null;
-  montoMinimo: number = 0;
+  userBalance: number = 500000;
   categoria: string = '';
-  userBalance: number = 500000; // Ejemplo de saldo del usuario
-  montoInicial: number = 500000;
+  correo: string = '';
+  celular: string = '';
+  isButtonDisabled: boolean = true;
+
+  // Definir el diccionario de montos mínimos por nombre de fondo
+  MontoMinimoPorFondo: { [key: string]: number } = {
+    'FPV_BTG_PACTUAL_RECAUDADORA': 75000,
+    'FPV_BTG_PACTUAL_ECOPETROL': 125000,
+    'DEUDAPRIVADA': 50000,
+    'FDO-ACCIONES': 250000,
+    'FPV_BTG_PACTUAL_DINAMICA': 100000
+  };
 
   constructor(private fundService: FundService, private balanceService: BalanceService) {
     this.userBalance = this.balanceService.getBalance();
-   }
+  }
 
   ngOnInit(): void {
-    this.refreshFondos(); 
+    this.refreshFondos();
+    this.refreshTransacciones();
     
-    this.fundService.getTransacciones().subscribe(transacciones => {
-      this.transacciones = transacciones;
-
-      // Calcular el monto inicial basado en las transacciones
-      this.calcularMontoInicial();
-    });
   }
-  
+
+  validateFields() {
+    if (this.correo && this.celular) {
+      alert('Solo puedes llenar uno de los dos campos: correo o celular.');
+      this.isButtonDisabled = true;
+    } else if (this.correo || this.celular) {
+      this.isButtonDisabled = false;
+    } else {
+      this.isButtonDisabled = true;
+    }
+  }
+
+  crear() {
+    // Aquí puedes agregar la lógica para crear el usuario
+    // ...
+
+    // Limpiar los campos
+    this.correo = '';
+    this.celular = '';
+    this.isButtonDisabled = true;
+  }
+
   refreshFondos(): void {
     this.fundService.getFondos().subscribe(fondos => {
       this.fondos = fondos;
-      // Calcular el monto inicial basado en las transacciones
       this.calcularMontoInicial();
     });
   }
-  onFondoChange(event: Event | undefined): void {
-    if (event) {
-      const selectElement = event.target as HTMLSelectElement;
-      const value = selectElement.value;
-      switch (value) {
-        case 'FPV_BTG_PACTUAL_RECAUDADORA':
-          this.categoria = 'FPV';
-          break;
-        case 'FPV_BTG_PACTUAL_ECOPETROL':
-          this.categoria = 'FPV';
-          break;
-        case 'DEUDAPRIVADA':
-          this.categoria = 'FIC';
-          break;
-        case 'FDO-ACCIONES':
-          this.categoria = 'FIC';
-          break;
-        case 'FPV_BTG_PACTUAL_DINAMICA':
-          this.categoria = 'FPV';
-          break;
-        default:
-          this.categoria = '';
-          break;
-      }
-    } else {
-      console.error('El evento es undefined');
-    }
+
+  refreshTransacciones(): void {
+    this.fundService.getTransacciones().subscribe(transacciones => {
+      this.transacciones = transacciones;
+      this.calcularMontoInicial();
+    });
+  }
+
+  onFondoChange(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    this.selectedFondo = this.fondos.find(fondo => fondo.nombre === selectElement.value) || null;
+    this.categoria = this.selectedFondo && this.selectedFondo.nombre.startsWith('FPV') ? 'FPV' : 'FIC';
   }
 
   onCreateFondo(fondo: Fondo): void {
-    const montoMinimoRequerido = this.getMontoMinimo(fondo.nombre);
+    const montoMinimoRequerido = this.MontoMinimoPorFondo[fondo.nombre];
     if (fondo.montoMinimo > this.userBalance) {
       alert(`No tiene saldo suficiente para vincularse al fondo ${fondo.nombre}`);
-    } else if (fondo.montoMinimo < montoMinimoRequerido) {
-      alert(`El monto mínimo para ${fondo.nombre} es ${montoMinimoRequerido}`);
-    } else {
-      this.fundService.createFondo(fondo).subscribe(newFondo => {
-        this.fondos.push(newFondo);
-        this.userBalance -= newFondo.montoMinimo; // Restar el monto creado al saldo inicial
-      });
+      return;
     }
-  }
 
-  getMontoMinimo(nombre: string): number {
-    switch (nombre) {
-      case 'FPV_BTG_PACTUAL_RECAUDADORA':
-        return 75000;
-      case 'FPV_BTG_PACTUAL_ECOPETROL':
-        return 125000;
-      case 'DEUDAPRIVADA':
-        return 50000;
-      case 'FDO-ACCIONES':
-        return 250000;
-      case 'FPV_BTG_PACTUAL_DINAMICA':
-        return 100000;
-      default:
-        return 0;
+    if (fondo.montoMinimo < montoMinimoRequerido) {
+      alert(`El monto mínimo para ${fondo.nombre} es ${montoMinimoRequerido}`);
+      return;
     }
+
+    this.fundService.createFondo(fondo).subscribe(newFondo => {
+      this.fondos.push(newFondo);
+      this.userBalance -= newFondo.montoMinimo;
+    });
   }
 
   calcularMontoInicial(): void {
+    this.userBalance = 500000; // Resetear el saldo inicial
     this.transacciones.forEach(transaccion => {
       if (transaccion.tipo === 'Eliminación') {
-        this.montoInicial += transaccion.monto;
+        this.userBalance += transaccion.monto;
       } else if (transaccion.tipo === 'Creación') {
-        this.montoInicial -= transaccion.monto;
+        this.userBalance -= transaccion.monto;
       }
     });
   }
-  
 }

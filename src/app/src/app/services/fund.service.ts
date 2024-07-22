@@ -8,8 +8,8 @@ import { Transaccion } from '../../../Mod/Transaccion.model';
   providedIn: 'root'
 })
 export class FundService {
-  private apiUrl = 'http://localhost:5188/api/fondos';
-  private transaccionesUrl = 'http://localhost:5188/api/transacciones';
+  private apiUrl = 'http://localhost:5072/api/funds';
+  private transaccionesUrl = 'http://localhost:5072/api/transactions';
 
 
   constructor(private http: HttpClient) { }

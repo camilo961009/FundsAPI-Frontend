@@ -1,6 +1,6 @@
 <div class="container mt-4">
   <div class="row">
-    <div class="col-md-8 mb-4"> <!-- Agregando mb-4 para un margen inferior -->
+    <div class="col-md-8 mb-4">
       <h2 class="h4">Fondos</h2>
       <div class="table-responsive">
         <table class="table">
@@ -22,9 +22,9 @@
       </div>
     </div>
     <div class="col-md-4">
-      <div class="mb-4"> <!-- Agregando mb-4 para un margen inferior -->
+      <div class="mb-4">
         <h3>Crear Nuevo Fondo</h3>
-        <p class="font-weight-bold">Monto: {{ montoInicial | currency:'USD':'symbol':'1.2-2' }}</p>
+        <p class="font-weight-bold">Monto: {{ userBalance | currency:'USD':'symbol':'1.2-2' }}</p>
         <form #fondoForm="ngForm" (ngSubmit)="onCreateFondo(fondoForm.value)">
           <div class="form-group">
             <label for="nombre">Nombre:</label>
@@ -38,7 +38,7 @@
           </div>
           <div class="form-group">
             <label for="montoMinimo">Monto:</label>
-            <input id="montoMinimo" name="montoMinimo" type="number" class="form-control" ngModel [(ngModel)]="montoMinimo">
+            <input id="montoMinimo" name="montoMinimo" type="number" class="form-control" ngModel>
           </div>
           <div class="form-group">
             <label for="categoria">Categoría:</label>
@@ -46,9 +46,13 @@
           </div>
           <div class="form-group">
             <label for="correo">Correo:</label>
-            <input id="correo" name="correo" type="email" class="form-control" ngModel>
+            <input id="correo" name="correo" type="email" class="form-control" [(ngModel)]="correo" (input)="validateFields()">
           </div>
-          <button type="submit" class="btn btn-primary">Crear</button>
+          <div class="form-group">
+            <label for="celular">Celular:</label>
+            <input id="celular" name="celular" class="form-control" [(ngModel)]="celular" (input)="validateFields()">
+          </div>
+          <button id="crearBtn" type="submit" class="btn btn-primary" [disabled]="isButtonDisabled">Crear</button>
         </form>
       </div>
     </div>
