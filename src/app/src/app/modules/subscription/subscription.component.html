@@ -14,7 +14,7 @@
           <tbody>
             <tr *ngFor="let fondo of fondos">
               <td>{{ fondo.nombre }}</td>
-              <td>{{ fondo.montoMinimo }}</td>
+              <td>{{ fondo.montoVinculacionFondo }}</td>
               <td>{{ fondo.categoria }}</td>
             </tr>
           </tbody>
@@ -28,7 +28,7 @@
         <form #fondoForm="ngForm" (ngSubmit)="onCreateFondo(fondoForm.value)">
           <div class="form-group">
             <label for="nombre">Nombre:</label>
-            <select id="nombre" name="nombre" class="form-control" ngModel (change)="onFondoChange($event)">
+            <select id="nombre" name="nombre" class="form-control" ngModel (change)="onFondoChange($event)" autofocus>
               <option value="FPV_BTG_PACTUAL_RECAUDADORA">FPV_BTG_PACTUAL_RECAUDADORA</option>
               <option value="FPV_BTG_PACTUAL_ECOPETROL">FPV_BTG_PACTUAL_ECOPETROL</option>
               <option value="DEUDAPRIVADA">DEUDAPRIVADA</option>
@@ -37,8 +37,9 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="montoMinimo">Monto:</label>
-            <input id="montoMinimo" name="montoMinimo" type="number" class="form-control" ngModel>
+            <label for="montoVinculacionFondo">Monto:</label>
+            <input id="montoVinculacionFondo" name="montoVinculacionFondo" type="number" class="form-control" ngModel
+              autofocus>
           </div>
           <div class="form-group">
             <label for="categoria">Categoría:</label>
@@ -46,7 +47,8 @@
           </div>
           <div class="form-group">
             <label for="correo">Correo:</label>
-            <input id="correo" name="correo" type="email" class="form-control" [(ngModel)]="correo" (input)="validateFields()">
+            <input id="correo" name="correo" type="email" class="form-control" [(ngModel)]="correo"
+              (input)="validateFields()">
           </div>
           <div class="form-group">
             <label for="celular">Celular:</label>

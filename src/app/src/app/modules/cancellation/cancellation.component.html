@@ -1,54 +1,43 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cancelar Fondo</title>
-  <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
 
-<div class="container mt-4">
-  <div>
-    <h2 class="h4">Cancelar Fondo</h2>
-    <div class="row">
-      <div class="col-md-12">
-        <ul class="list-group">
-          <!-- Encabezados de columnas -->
-          <li class="list-group-item bg-light">
-            <div class="row font-weight-bold">
-              <div class="col-md-4">Nombre</div>
-              <div class="col-md-4">Monto Mínimo</div>
-              <div class="col-md-4">Categoría</div>
-            </div>
-          </li>
-          
-          <!-- Datos de los fondos -->
-          <li class="list-group-item" *ngFor="let fondo of fondos">
-            <div class="row">
-              <div class="col-md-4">{{ fondo.nombre }}</div>
-              <div class="col-md-4">{{ fondo.montoMinimo | currency:'USD':'symbol':'1.2-2' }}</div>
-              <div class="col-md-4">{{ fondo.categoria }}</div>
-            </div>
-            <div class="row mt-2">
-              <div class="col-md-12 text-right">
-                <button class="btn btn-danger" (click)="onCancelFondo(fondo.id)">Cancelar</button>
+  <div class="container mt-4">
+    <div>
+      <h2 class="h4">Cancelar Fondo</h2>
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="list-group">
+            <li class="list-group-item bg-light">
+              <div class="row font-weight-bold">
+                <div class="col-md-4">Nombre</div>
+                <div class="col-md-4">Monto</div>
+                <div class="col-md-4">Categoría</div>
               </div>
-            </div>
-          </li>
-        </ul>
+            </li>
+            <li class="list-group-item" *ngFor="let fondo of fondos">
+              <div class="row">
+                <div class="col-md-4">{{ fondo.nombre }}</div>
+                <div class="col-md-4">{{ fondo.montoVinculacionFondo | currency:'USD':'symbol':'1.2-2' }}</div>
+                <div class="col-md-4">{{ fondo.categoria }}</div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-md-12 text-right">
+                  <button class="btn btn-danger" (click)="onCancelFondo(fondo.id)">Cancelar</button>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-<!-- Bootstrap JS y archivos JavaScript opcionales -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-</body>
-</html>
-
-

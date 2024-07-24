@@ -1,7 +1,7 @@
 export interface Fondo {
     id?: string;
     nombre: string;
-    montoMinimo: number;
+    montoVinculacionFondo: number;
     categoria: string;
     correo: string;
     celular: string;

@@ -16,7 +16,7 @@
             <tr *ngFor="let transaccion of transacciones">
               <td class="text-center font-weight-bold">{{ transaccion.fecha | date }}</td>
               <td class="text-center">{{ transaccion.tipo }}</td>
-              <td class="text-center">{{ transaccion.monto | currency:'USD':'symbol':'1.2-2' }}</td>
+              <td class="text-center">{{ transaccion.monto | currency:'COP':'symbol':'1.2-2' }}</td>
             </tr>
           </tbody>
         </table>

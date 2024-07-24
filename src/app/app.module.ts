@@ -8,9 +8,10 @@ import { AppComponent } from './app.component';
 import { SubscriptionComponent } from './src/app/modules/subscription/subscription.component';
 import { CancellationComponent } from './src/app/modules/cancellation/cancellation.component';
 import { TransactionHistoryComponent } from './src/app/modules/transaction-history/transaction-history.component';
-import { NotificationComponent } from './src/app/modules/notification/notification.component';
 import { FundService } from './src/app/services/fund.service';
 import { BalanceService } from './src/app/services/BalanceService';
+
+import Swal from 'sweetalert2';
 
 
 @NgModule({
@@ -18,8 +19,7 @@ import { BalanceService } from './src/app/services/BalanceService';
     AppComponent,
     SubscriptionComponent,
     CancellationComponent,
-    TransactionHistoryComponent,
-    NotificationComponent
+    TransactionHistoryComponent
   ],
   imports: [
     BrowserModule,

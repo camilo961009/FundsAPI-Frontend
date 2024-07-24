@@ -1,8 +1,9 @@
-import { Component,OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FundService } from '../../services/fund.service';
 import { Fondo } from '../../../../Mod/fondo.model';
 import { BalanceService } from '../../services/BalanceService';
 import { Transaccion } from 'src/app/Mod/Transaccion.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-subscription',
@@ -15,11 +16,12 @@ export class SubscriptionComponent implements OnInit {
   selectedFondo: Fondo | null = null;
   userBalance: number = 500000;
   categoria: string = '';
+  nombre: string = ''; 
   correo: string = '';
   celular: string = '';
-  isButtonDisabled: boolean = true;
-
-  // Definir el diccionario de montos mínimos por nombre de fondo
+  isButtonDisabled = false;
+  warningMessage: string = '';
+  
   MontoMinimoPorFondo: { [key: string]: number } = {
     'FPV_BTG_PACTUAL_RECAUDADORA': 75000,
     'FPV_BTG_PACTUAL_ECOPETROL': 125000,
@@ -35,28 +37,27 @@ export class SubscriptionComponent implements OnInit {
   ngOnInit(): void {
     this.refreshFondos();
     this.refreshTransacciones();
-    
+
   }
 
   validateFields() {
     if (this.correo && this.celular) {
-      alert('Solo puedes llenar uno de los dos campos: correo o celular.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Correo o Celular',
+        text: `Solo puedes llenar uno de los dos campos: correo o celular.`,
+        showConfirmButton: true,
+        animation: true,
+        customClass: {
+          popup: 'animated tada'
+        }
+      });
       this.isButtonDisabled = true;
     } else if (this.correo || this.celular) {
       this.isButtonDisabled = false;
     } else {
       this.isButtonDisabled = true;
     }
-  }
-
-  crear() {
-    // Aquí puedes agregar la lógica para crear el usuario
-    // ...
-
-    // Limpiar los campos
-    this.correo = '';
-    this.celular = '';
-    this.isButtonDisabled = true;
   }
 
   refreshFondos(): void {
@@ -73,28 +74,56 @@ export class SubscriptionComponent implements OnInit {
     });
   }
 
-  onFondoChange(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement;
-    this.selectedFondo = this.fondos.find(fondo => fondo.nombre === selectElement.value) || null;
-    this.categoria = this.selectedFondo && this.selectedFondo.nombre.startsWith('FPV') ? 'FPV' : 'FIC';
+  onFondoChange(event: any) {
+    const selectedNombre = event.target.value;
+    if (selectedNombre === 'FPV_BTG_PACTUAL_RECAUDADORA' || selectedNombre === 'FPV_BTG_PACTUAL_ECOPETROL' || selectedNombre === 'FPV_BTG_PACTUAL_DINAMICA') {
+      this.categoria = 'FPV';
+    } else if (selectedNombre === 'DEUDAPRIVADA' || selectedNombre === 'FDO-ACCIONES') {
+      this.categoria = 'FIC';
+    }
   }
 
   onCreateFondo(fondo: Fondo): void {
     const montoMinimoRequerido = this.MontoMinimoPorFondo[fondo.nombre];
-    if (fondo.montoMinimo > this.userBalance) {
-      alert(`No tiene saldo suficiente para vincularse al fondo ${fondo.nombre}`);
+    if (fondo.montoVinculacionFondo > this.userBalance) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Saldo insuficiente',
+        text: `No tiene saldo suficiente para vincularse al fondo ${fondo.nombre}`,
+        showConfirmButton: true,
+        animation: true,
+        customClass: {
+          popup: 'animated tada' // Ejemplo de clase CSS para animación
+        }
+      });
       return;
     }
 
-    if (fondo.montoMinimo < montoMinimoRequerido) {
-      alert(`El monto mínimo para ${fondo.nombre} es ${montoMinimoRequerido}`);
+    if (fondo.montoVinculacionFondo < montoMinimoRequerido) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Monto Minimo Requerido Requerido',
+        text: `El monto mínimo para ${fondo.nombre} es ${montoMinimoRequerido}`,
+        showConfirmButton: true,
+        animation: true,
+        customClass: {
+          popup: 'animated tada'
+        }
+      });
       return;
     }
 
     this.fundService.createFondo(fondo).subscribe(newFondo => {
       this.fondos.push(newFondo);
-      this.userBalance -= newFondo.montoMinimo;
+      this.userBalance -= newFondo.montoVinculacionFondo;
+      Swal.fire({
+        title: '¡Éxito!',
+        text: 'El fondo ha sido creado exitosamente.',
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
+      });
     });
+
   }
 
   calcularMontoInicial(): void {
